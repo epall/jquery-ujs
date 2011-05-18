@@ -245,7 +245,12 @@
 
   // ajaxPrefilter is a jQuery 1.5 feature
   if ('ajaxPrefilter' in $) {
-    $.ajaxPrefilter(function(options, originalOptions, xhr){ rails.CSRFProtection(xhr); });
+    $.ajaxPrefilter(function(options, originalOptions, xhr){
+      var prefix = document.location.protocol + "//" + document.location.host;
+      if(options.url.indexOf(prefix) == 0) {
+        rails.CSRFProtection(xhr);
+      }
+    });
   } else {
     $(document).ajaxSend(function(e, xhr){ rails.CSRFProtection(xhr); });
   }
